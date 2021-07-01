@@ -1,16 +1,10 @@
 <!DOCTYPE html>
-<html >
-<!--From https://codepen.io/frytyler/pen/EGdtg-->
-<head>
-  <meta charset="UTF-8">
-  <title>Heart Attack Predictor</title>
-  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-<style>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>Heart Attack Predictor</title>
+	<style>
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 .btn { display: inline-block; *display: inline; *zoom: 1; padding: 4px 10px 4px; margin-bottom: 0; font-size: 13px; line-height: 18px; color: #333333; text-align: center;text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75); vertical-align: middle; background-color: #f5f5f5; background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6); background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6); background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6)); background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6); background-image: -o-linear-gradient(top, #ffffff, #e6e6e6); background-image: linear-gradient(top, #ffffff, #e6e6e6); background-repeat: repeat-x; filter: progid:dximagetransform.microsoft.gradient(startColorstr=#ffffff, endColorstr=#e6e6e6, GradientType=0); border-color: #e6e6e6 #e6e6e6 #e6e6e6; border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); border: 1px solid #e6e6e6; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05); -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05); cursor: pointer; *margin-left: .3em; }
 .btn:hover, .btn:active, .btn.active, .btn.disabled, .btn[disabled] { background-color: #e6e6e6; }
@@ -38,83 +32,32 @@ body {
 	background: -ms-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), -ms-linear-gradient(top,  rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), -ms-linear-gradient(-45deg,  #670d10 0%,#092756 100%);
 	
 }
-.login { 
-	position: absolute;
-	top: 40%;
-	left: 50%;
-	margin: -200px ;
-	width:400px;
-	height:100%;
+
+.results{
+ margin-top:150px;
 }
-
-
-input { 
-	width: 100%; 
-	margin-bottom: 10px; 
-	background: rgba(0,0,0,0.3);
-	border: none;
-	outline: none;
-	padding: 10px;
-	font-size: 13px;
-	color: #fff;
-	text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
-	border: 1px solid rgba(0,0,0,0.3);
-	border-radius: 4px;
-	box-shadow: inset 0 -5px 45px rgba(100,100,100,0.2), 0 1px 1px rgba(255,255,255,0.2);
-	-webkit-transition: box-shadow .5s ease;
-	-moz-transition: box-shadow .5s ease;
-	-o-transition: box-shadow .5s ease;
-	-ms-transition: box-shadow .5s ease;
-	transition: box-shadow .5s ease;
-}
-input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgba(255,255,255,0.2); }
-
-
 </style>
 
 
-  
-</head>
+	
+	
+	
+	</head>
 
+    <body>
 
+		<!-- Result -->
+		<div class="results">
+			{% if prediction==1 %}
+				<h1>Prediction: <span class='danger'>You are likely to have a heart attack</span></h1>
+				<img class="png" src="{{ url_for('static', filename='Sad.png') }}" alt="Happy Image">
+			{% elif prediction==0 %}
+				<h1>Prediction: <span class='safe'>You are unlikely to have a heart attack</span></h1>
+				<img class="gif" src="{{ url_for('static', filename='Kanye.gif') }}" alt="Sad Image">
+			{% endif %}
+		</div>
 
+		
 
-
-<body>
- <div class="login">
-	<h1>Heart Attack Predictor</h1>
-     
-    <form action="{{ url_for('predict')}}"method="post">
-                <input class="form-input" type="text" name="age" placeholder="Age (years) eg. 46"><br>
-                <input class="form-input" type="text" name="sex" placeholder="Sex (m or f)"><br>
-                <input class="form-input" type="text" name="chest_pain" placeholder="Between 0 and 3"><br>
-                <input class="form-input" type="text" name="blood_pressure" placeholder="Resting Blood Pressure (in mm Hg) eg. 120"><br>
-                <input class="form-input" type="text" name="cholestoral" placeholder="Cholestoral (mg/dl) eg. 199"><br>
-                <input class="form-input" type="text" name="blood_sugar" placeholder="Blood Sugar > 120 (mg/dl) (1=true, 0=false)"><br>
-                <input class="form-input" type="text" name="cardiographic_results" placeholder="Resting Electrocardiographic Results (1=true, 0=false)"><br>
-                <input class="form-input" type="text" name="heart_rate" placeholder="Maximum Heart Rate eg. 163"><br>
-                <input class="form-input" type="text" name="angina" placeholder="Exercise Induced Angina (1=yes, 0=no)"><br>
-                <input class="form-input" type="text" name="angina" placeholder="Previous Peak eg. 0.8"><br>
-
-        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
-    </form>
-	<br>
-   <br>
-   {{ prediction_text }}
-
-
-	<span class="footer">
-    Made by the GOAT
-</span>
- </div>
-
-
-</body>
-
-</html>
-
-
-
-
-    
+	</body>
 </html>
