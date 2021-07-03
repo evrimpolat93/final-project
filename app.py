@@ -1,5 +1,5 @@
 # Importing essential libraries
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import pickle
 import numpy as np
 
@@ -11,32 +11,33 @@ app = Flask(__name__)
 
 
 @app.route('/')
-@app.route('/home')
 def home():
     return render_template('home.html')
-
 
 @app.route('/about')
 def about():
     return render_template('about.html')
 
-
-@app.route('/predictions')
+@app.route('/predictions', methods=['POST'])
 def predictions():
      if request.method == 'POST':
         age = int(request.form['age'])
-        sex = int(request.form['sex'])
+        # sex = int(request.form['sex'])
         cp = int(request.form['chest_pain'])
         tr = int(request.form['blood_pressure'])
         chol = int(request.form['cholestoral'])
-        fbs = int(request.form['blood_sugar'])
-        ecg = int(request.form['cardiographic_results'])
+        # fbs = int(request.form['blood_sugar'])
+        # ecg = int(request.form['cardiographic_results'])
         chh = int(request.form['heart_rate'])
-        exng = int(request.form['angina'])
+        # exng = int(request.form['angina'])
         peak = float(request.form['previous_peak'])
+        # slp = int(request.form['slope'])
+        caa = int(request.form['vessels'])
+        thall = int(request.form['thal'])
 
-        data = np.array([[age, sex, cp, tr, chol, fbs, ecg, chh, exng, peak]])
-        prediction = classifier.predictions(data)
+        data = np.array([[age, cp, tr, chol, chh, peak,\
+            caa, thall]])
+        prediction = classifier.predict(data)
         
         return render_template('result.html', prediction=prediction)
 
