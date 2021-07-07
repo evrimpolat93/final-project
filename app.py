@@ -25,7 +25,7 @@ def predictions():
         # sex = int(request.form['sex'])
         cp = int(request.form['chest_pain'])
         tr = int(request.form['blood_pressure'])
-        chol = int(request.form['cholestoral'])
+        chol = int(request.form['cholesterol'])
         # fbs = int(request.form['blood_sugar'])
         # ecg = int(request.form['cardiographic_results'])
         chh = int(request.form['heart_rate'])
